@@ -1,6 +1,6 @@
 ---
-title: "Test"
-author: "x"
+title: "R examples"
+author: "LB"
 date: "2022-12-30"
 output: html_document
 ---
@@ -9,11 +9,94 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Ex
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+For en given matrix $C$
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+```{r, echo=FALSE}
+v1 = c(1,0,0)
+v2 = c(0.1,0,1.1)
+C = rbind(v1,v2)
+print(C)
+```
+
+Og en vektor $t$ kvadreret og sat diagonalt i en matrix
+```{r, echo=FALSE}
+t = c(1,2,3)
+print(t)
+W = matrix(diag(sqrt(t)), ncol = length(t))
+print(W)
+```
+
+En operator-matrix $M$ 
+```{r, echo=FALSE}
+M = diag(1,length(t), length(t))
+print(M)
+M[row(M)==col(M)+1] = -1
+print(M)
+print(solve(M))
+```
+$A$ er en NxN matrix
+```{r, echo=FALSE}
+A = (C %*% solve(M)) %*% solve(W)
+print(A)
+```
+
+Den pseudoinverse $X$:
+```{r, echo=FALSE}
+X = t(A) %*% (solve(A %*% t(A)))
+print(X)
+```
+
+En ikke nærmere defineret matrix:
+```{r, echo=FALSE}
+d = matrix(0, dim(X)[1], 1)
+d[row(d)==1] = 1
+Y = (C %*% solve(M)) %*% d
+print(Y)
+```
+
+En vektor $P$ og en incrementor og d* og d
+```{r, echo=FALSE}
+P = c(0.98,0.95)
+print(P)
+
+mI = P - Y;
+print(mI)
+
+mD = X %*% mI;
+print(mD)
+
+df = solve(M) %*% ((solve(W) %*% mD) + d);
+print(df)
+```
+
+
+
+
+```{r cashflows}
+
+# creating company data frame
+comp.data <- data.frame(
+ 
+# bond ids
+# data members
+comp_id = c (1:3),
+ 
+# company names
+comp_name = c("Geeks", "For", "Geeks"),
+growth = c(16000, 14000, 12000),
+ 
+# company start dates
+# data members
+comp_start_date = as.Date(c("02/05/10", "04/04/10", "05/03/10"))
+)
+print(comp.data)
+```
+
+## Including code
+
+You can embed an R code chunk like this:
 
 ```{r cars}
 summary(cars)
@@ -27,4 +110,15 @@ You can also embed plots, for example:
 plot(pressure)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+## Notes and references
+* For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+* Add the `echo = FALSE` parameter to the code chunk to prevent printing of the R code that generated the plot.
+    + Item 2a
+    + Item 2b
+    
+## Shortcuts
+* Ctrl + Shift + K => Knit
+* Ctrl + D => Delete line of code
+
+
+
